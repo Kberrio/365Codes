@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Advanced JavaScript Example</title>
+</head>
+<body>
+    <h1 id="demo">Click the button</h1>
+    <button id="myButton">Click Me</button>
+
+    <script>
+        // Get a reference to the button and the heading
+        var button = document.getElementById("myButton");
+        var heading = document.getElementById("demo");
+
+        // Define a function to change the text when the button is clicked
+        function changeText() {
+            heading.textContent = "Button clicked!";
+        }
+
+        // Add a click event listener to the button
+        button.addEventListener("click", changeText);
+    </script>
+</body>
+</html>
