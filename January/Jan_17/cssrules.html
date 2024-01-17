@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Functions Demo</title>
+    <style>
+        body {
+            background: linear-gradient(to right, rgb(252, 209, 144), rgba(252, 209, 144, 0.7));
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: radial-gradient(circle, rgba(255, 0, 0, 0.8), rgba(0, 0, 255, 0.8)), url('image.jpg');
+            background-size: cover;
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: calc(2rem + 2vw);
+        }
+
+        p {
+            font-size: 1.5rem;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px;
+        }
+
+        .button {
+            background-color: var(--main-color);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: rgba(52, 152, 219, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome to My Page</h1>
+        <p>This is a demonstration of CSS functions and styling.</p>
+        <button class="button">Learn More</button>
+    </header>
+
+    <div class="container">
+        <h2>About Us</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    </div>
+
+    <div class="container">
+        <h2>Contact Us</h2>
+        <p>Email: example@example.com</p>
+    </div>
+</body>
+</html>
