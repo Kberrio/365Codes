@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine's Love Program</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        padding-top: 50px;
+    }
+</style>
+</head>
+<body>
+<h1>Valentine's Love Program</h1>
+<script>
+    function displayMessage() {
+        var yourName = prompt("Enter your name:");
+        var partnerName = prompt("Enter your partner's name:");
+        
+        if (yourName && partnerName) {
+            var loveMessage = "Dear " + yourName + ",\n\n";
+            loveMessage += "You make my world brighter and my heart lighter.\n";
+            loveMessage += "I'm grateful to have you in my life, " + partnerName + ".\n";
+            loveMessage += "Happy Valentine's Day!\n\n";
+            loveMessage += "With all my love,\n";
+            loveMessage += "Your Secret Admirer";
+
+            alert(loveMessage);
+        } else {
+            alert("Please enter both your name and your partner's name.");
+        }
+    }
+
+    displayMessage();
+</script>
+</body>
+</html>
