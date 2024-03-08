@@ -5,7 +5,7 @@ public class GreetingManager : MonoBehaviour
 {
     public InputField nameInputField;
     public Text greetingText;
-    public Text inputPromptText;
+    public Text inputPromptT2ext;
 
     public void GreetUser()
     {
