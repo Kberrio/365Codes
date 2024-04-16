@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Juicy Button</title>
+<style>
+    .juicy-button {
+        padding: 10px 20px;
+        font-size: 16px;
+        color: white;
+        background-color: #007BFF;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .juicy-button:hover {
+        transform: scale(1.1);
+        box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4);
+    }
+    .juicy-button:active {
+        transform: scale(0.95);
+        box-shadow: 0 2px 8px rgba(0, 123, 255, 0.5);
+    }
+</style>
+</head>
+<body>
+<button class="juicy-button">Click Me!</button>
+</body>
+</html>
