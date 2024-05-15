@@ -1,3 +1,4 @@
+//this reflects the same server in java as if it was a multithreaded server but this time in node
 const http = require('http');
 const { Worker, isMainThread, parentPort, workerData } = require('worker_threads');
 const os = require('os');
