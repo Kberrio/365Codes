@@ -97,7 +97,7 @@ async function handleRequest(req, res) {
 
 app.use(handleRequest);
 
-// Create HTTP and HTTPS servers
+// Create a HTTP and HTTPS servers
 const httpServer = http.createServer(app);
 const httpsServer = https.createServer(sslOptions, app);
 
