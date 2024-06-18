@@ -6,7 +6,7 @@ app.use(express.json());
 
 let races = [];
 
-// Helper function to simulate race and determine the winner
+// Helper function to simulate race and determine the winners
 const simulateRace = (participants) => {
   const results = participants.map(participant => ({
     name: participant,
