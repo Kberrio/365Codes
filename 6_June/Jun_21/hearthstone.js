@@ -12,7 +12,7 @@ let players = {};
 let game = {
     turn: null,
     players: [],
-    cards: [], // This should be your deck of cards
+    cards: [], // This should be your deck of cards. 
 };
 
 app.use(express.static('public'));
