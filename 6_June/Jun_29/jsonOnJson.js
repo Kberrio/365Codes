@@ -240,5 +240,4 @@ const data = {
   displayDepartmentInfo(data.company.departments);
   displayFinancialInfo(data.company.financials);
   displayProductPortfolio(data.productPortfolio);
-  displayClientInfo(data.clients
   

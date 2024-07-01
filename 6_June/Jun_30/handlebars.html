@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Handlebars Example</title>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.min.js"></script>
+</head>
+<body>
+
+<div id="content"></div>
+
+<script id="entry-template" type="text/x-handlebars-template">
+    <h1>{{title}}</h1>
+    <p>{{body}}</p>
+</script>
+
+<script>
+// Get the template from the HTML
+const source = document.getElementById('entry-template').innerHTML;
+
+// Compile the template
+const template = Handlebars.compile(source);
+
+// Define the context (data) to pass to the template
+const context = {
+    title: "Handlebars.js Example",
+    body: "This is an example of using Handlebars.js to render a template."
+};
+
+// Pass the context to the template
+const html = template(context);
+
+// Insert the rendered HTML into the DOM
+document.getElementById('content').innerHTML = html;
+</script>
+
+</body>
+</html>
