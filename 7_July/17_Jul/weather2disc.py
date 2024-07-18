@@ -22,3 +22,4 @@ async def on_ready():
     check_weather.start()
 
 client.run(DISCORD_TOKEN)
+#Changes may be subject to APIs
