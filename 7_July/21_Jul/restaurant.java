@@ -84,7 +84,7 @@ public class RestaurantSystem {
 
         // Simulating order placement
         order.addItem(restaurant.getMenuItem(0)); // Adding Burger
-        order.addItem(restaurant.getMenuItem(3)); // Adding Fries
+        order.addItem(restaurant.getMenuItem(3)s); // Adding Fries
         order.addItem(restaurant.getMenuItem(4)); // Adding Soda
 
         order.displayOrder();
