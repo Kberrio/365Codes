@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Aggregator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>News Aggregator</h1>
+        <div id="search-section">
+            <input type="text" id="search-input" placeholder="Search news...">
+            <button id="search-button">Search</button>
+        </div>
+        <div id="category-filter">
+            <select id="category-select">
+                <option value="">All Categories</option>
+                <option value="business">Business</option>
+                <option value="technology">Technology</option>
+                <option value="science">Science</option>
+                <option value="health">Health</option>
+            </select>
+        </div>
+        <div id="news-container"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
