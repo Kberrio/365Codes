@@ -1,0 +1,63 @@
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+.translation-box {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.language-select {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+select, button, textarea {
+    padding: 10px;
+    font-size: 16px;
+}
+
+textarea {
+    height: 150px;
+    resize: vertical;
+}
+
+#translate-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#swap-lang {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+#detected-lang {
+    margin-top: 10px;
+    font-style: italic;
+}
