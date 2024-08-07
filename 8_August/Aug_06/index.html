@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Market Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Stock Market Tracker</h1>
+        <div id="search-section">
+            <input type="text" id="stock-input" placeholder="Enter stock symbol (e.g., AAPL)">
+            <button id="search-btn">Search</button>
+        </div>
+        <div id="stock-info"></div>
+        <canvas id="price-chart"></canvas>
+        <div id="watchlist">
+            <h2>Watchlist</h2>
+            <ul id="watchlist-items"></ul>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
