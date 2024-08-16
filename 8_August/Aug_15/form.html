@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTMX Task Manager</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/htmx/1.9.3/htmx.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .task {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .completed {
+            text-decoration: line-through;
+            color: #888;
+        }
+        .task-actions {
+            display: flex;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>HTMX Task Manager</h1>
+    
+    <form hx-post="/tasks" hx-target="#task-list" hx-swap="beforeend">
+        <input type="text" name="task" placeholder="Enter a new task" required>
+        <button type="submit">Add Task</button>
+    </form>
+    
+    <div id="task-list">
+        <!-- Tasks will be loaded here -->
+    </div>
+
+    <script>
+        // Simulated backend API
+        htmx.on("htmx:configRequest", (event) => {
+            const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+            
+            if (event.detail.path === "/tasks" && event.detail.method === "GET") {
+                event.detail.responseText = tasks.map((task, index) => `
+                    <div class="task ${task.completed ? 'completed' : ''}" id="task-${index}">
+                        <span>${task.text}</span>
+                        <div class="task-actions">
+                            <button hx-put="/tasks/${index}/toggle" hx-target="#task-${index}" hx-swap="outerHTML">
+                                ${task.completed ? 'Undo' : 'Complete'}
+                            </button>
+                            <button hx-get="/tasks/${index}/edit" hx-target="#task-${index}" hx-swap="outerHTML">
+                                Edit
+                            </button>
+                            <button hx-delete="/tasks/${index}" hx-target="#task-${index}" hx-swap="outerHTML">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            } else if (event.detail.path === "/tasks" && event.detail.method === "POST") {
+                const newTask = { text: event.detail.parameters.task, completed: false };
+                tasks.push(newTask);
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+                event.detail.responseText = `
+                    <div class="task" id="task-${tasks.length - 1}">
+                        <span>${newTask.text}</span>
+                        <div class="task-actions">
+                            <button hx-put="/tasks/${tasks.length - 1}/toggle" hx-target="#task-${tasks.length - 1}" hx-swap="outerHTML">
+                                Complete
+                            </button>
+                            <button hx-get="/tasks/${tasks.length - 1}/edit" hx-target="#task-${tasks.length - 1}" hx-swap="outerHTML">
+                                Edit
+                            </button>
+                            <button hx-delete="/tasks/${tasks.length - 1}" hx-target="#task-${tasks.length - 1}" hx-swap="outerHTML">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                `;
+            } else if (event.detail.path.match(/\/tasks\/\d+\/toggle/) && event.detail.method === "PUT") {
+                const index = parseInt(event.detail.path.split('/')[2]);
+                tasks[index].completed = !tasks[index].completed;
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+                event.detail.responseText = `
+                    <div class="task ${tasks[index].completed ? 'completed' : ''}" id="task-${index}">
+                        <span>${tasks[index].text}</span>
+                        <div class="task-actions">
+                            <button hx-put="/tasks/${index}/toggle" hx-target="#task-${index}" hx-swap="outerHTML">
+                                ${tasks[index].completed ? 'Undo' : 'Complete'}
+                            </button>
+                            <button hx-get="/tasks/${index}/edit" hx-target="#task-${index}" hx-swap="outerHTML">
+                                Edit
+                            </button>
+                            <button hx-delete="/tasks/${index}" hx-target="#task-${index}" hx-swap="outerHTML">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                `;
+            } else if (event.detail.path.match(/\/tasks\/\d+\/edit/) && event.detail.method === "GET") {
+                const index = parseInt(event.detail.path.split('/')[2]);
+                event.detail.responseText = `
+                    <div class="task" id="task-${index}">
+                        <form hx-put="/tasks/${index}" hx-target="#task-${index}" hx-swap="outerHTML">
+                            <input type="text" name="task" value="${tasks[index].text}" required>
+                            <button type="submit">Save</button>
+                            <button hx-get="/tasks" hx-target="#task-list" hx-swap="innerHTML">Cancel</button>
+                        </form>
+                    </div>
+                `;
+            } else if (event.detail.path.match(/\/tasks\/\d+$/) && event.detail.method === "PUT") {
+                const index = parseInt(event.detail.path.split('/')[2]);
+                tasks[index].text = event.detail.parameters.task;
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+                event.detail.responseText = `
+                    <div class="task ${tasks[index].completed ? 'completed' : ''}" id="task-${index}">
+                        <span>${tasks[index].text}</span>
+                        <div class="task-actions">
+                            <button hx-put="/tasks/${index}/toggle" hx-target="#task-${index}" hx-swap="outerHTML">
+                                ${tasks[index].completed ? 'Undo' : 'Complete'}
+                            </button>
+                            <button hx-get="/tasks/${index}/edit" hx-target="#task-${index}" hx-swap="outerHTML">
+                                Edit
+                            </button>
+                            <button hx-delete="/tasks/${index}" hx-target="#task-${index}" hx-swap="outerHTML">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                `;
+            } else if (event.detail.path.match(/\/tasks\/\d+$/) && event.detail.method === "DELETE") {
+                const index = parseInt(event.detail.path.split('/')[2]);
+                tasks.splice(index, 1);
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+                event.detail.responseText = '';
+            }
+            
+            event.detail.headers['Content-Type'] = 'text/html';
+        });
+
+        // Load initial tasks
+        htmx.ajax('GET', '/tasks', '#task-list');
+    </script>
+</body>
+</html>
