@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bouncing Ball Animation</title>
+    <style>
+        .container {
+            width: 200px;
+            height: 300px;
+            background-color: #f0f0f0;
+            position: relative;
+            overflow: hidden;
+        }
+        .ball {
+            width: 50px;
+            height: 50px;
+            background-color: #ff0000;
+            border-radius: 50%;
+            position: absolute;
+            left: 75px;
+            animation: bounce 2s infinite, color-change 4s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { top: 0; }
+            50% { top: 250px; }
+        }
+        @keyframes color-change {
+            0% { background-color: #ff0000; }
+            33% { background-color: #00ff00; }
+            66% { background-color: #0000ff; }
+            100% { background-color: #ff0000; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="ball"></div>
+    </div>
+</body>
+</html>
