@@ -18,6 +18,7 @@ public:
         // Create back and forward buttons
         backButton = new QPushButton("Back", this);
         connect(backButton, &QPushButton::clicked, webView, &QWebEngineView::back);
+        
 
         forwardButton = new QPushButton("Forward", this);
         connect(forwardButton, &QPushButton::clicked, webView, &QWebEngineView::forward);
