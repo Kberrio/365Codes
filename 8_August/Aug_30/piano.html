@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Piano App</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        .piano {
+            display: flex;
+            background-color: #1a1a1a;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .key {
+            width: 50px;
+            height: 200px;
+            margin: 0 2px;
+            background-color: white;
+            border: 1px solid #000;
+            border-radius: 0 0 5px 5px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            padding-bottom: 10px;
+            font-weight: bold;
+        }
+        .key.black {
+            background-color: black;
+            color: white;
+            height: 120px;
+            width: 30px;
+            margin: 0 -15px;
+            z-index: 1;
+        }
+        .key:active, .key.active {
+            background-color: #ddd;
+        }
+        .key.black:active, .key.black.active {
+            background-color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="piano">
+        <div class="key" data-note="C">C</div>
+        <div class="key black" data-note="C#">C#</div>
+        <div class="key" data-note="D">D</div>
+        <div class="key black" data-note="D#">D#</div>
+        <div class="key" data-note="E">E</div>
+        <div class="key" data-note="F">F</div>
+        <div class="key black" data-note="F#">F#</div>
+        <div class="key" data-note="G">G</div>
+        <div class="key black" data-note="G#">G#</div>
+        <div class="key" data-note="A">A</div>
+        <div class="key black" data-note="A#">A#</div>
+        <div class="key" data-note="B">B</div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <script>
+        const synth = new Tone.Synth().toDestination();
+        const keys = document.querySelectorAll('.key');
+        const keyMap = {
+            'a': 'C', 'w': 'C#', 's': 'D', 'e': 'D#', 'd': 'E', 'f': 'F',
+            't': 'F#', 'g': 'G', 'y': 'G#', 'h': 'A', 'u': 'A#', 'j': 'B'
+        };
+
+        keys.forEach(key => {
+            key.addEventListener('mousedown', () => playNote(key.dataset.note));
+            key.addEventListener('mouseup', () => stopNote());
+            key.addEventListener('mouseleave', () => stopNote());
+        });
+
+        document.addEventListener('keydown', e => {
+            if (keyMap[e.key] && !e.repeat) {
+                const note = keyMap[e.key];
+                playNote(note);
+                document.querySelector(`.key[data-note="${note}"]`).classList.add('active');
+            }
+        });
+
+        document.addEventListener('keyup', e => {
+            if (keyMap[e.key]) {
+                stopNote();
+                document.querySelector(`.key[data-note="${keyMap[e.key]}"]`).classList.remove('active');
+            }
+        });
+
+        function playNote(note) {
+            synth.triggerAttack(`${note}4`);
+        }
+
+        function stopNote() {
+            synth.triggerRelease();
+        }
+    </script>
+</body>
+</html>
