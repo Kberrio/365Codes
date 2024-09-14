@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mixology Masters</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #6200ea;
+            --secondary-color: #03dac6;
+            --background-color: #121212;
+            --surface-color: #1e1e1e;
+            --on-surface-color: #ffffff;
+            --text-primary: rgba(255, 255, 255, 0.87);
+            --text-secondary: rgba(255, 255, 255, 0.6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        nav {
+            background-color: var(--surface-color);
+            padding: 10px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav ul {
+            list-style-type: none;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: var(--secondary-color);
+        }
+
+        .drink-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .drink-card {
+            background-color: var(--surface-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .drink-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .drink-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .drink-info {
+            padding: 15px;
+        }
+
+        .drink-info h3 {
+            margin-bottom: 10px;
+            color: var(--secondary-color);
+        }
+
+        .drink-info p {
+            font-size: 0.9em;
+            color: var(--text-secondary);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: var(--surface-color);
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .close {
+            color: var(--text-secondary);
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: var(--text-primary);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        #search-bar {
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            border: 2px solid var(--secondary-color);
+            border-radius: 5px;
+            font-size: 1em;
+            background-color: var(--surface-color);
+            color: var(--text-primary);
+        }
+
+        #loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .spinner {
+            border: 4px solid var(--surface-color);
+            border-top: 4px solid var(--secondary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .auth-container {
+            display: flex;
+            justify-content: flex-end;
+            padding: 10px;
+            background-color: var(--surface-color);
+        }
+
+        .auth-container button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .favorite-btn {
+            background-color: transparent;
+            border: none;
+            color: gray;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .favorite-btn.active {
+            color: gold;
+        }
+
+        .rating {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .rating .star {
+            font-size: 1.5em;
+            color: gray;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .rating .star.active {
+            color: gold;
+        }
+
+        #stats-container {
+            margin-top: 30px;
+            background-color: var(--surface-color);
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .drink-list {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Mixology Masters</h1>
+        <p>Discover, create, and perfect amazing cocktails!</p>
+    </header>
+    
+    <div class="auth-container">
+        <button id="login-btn">Login</button>
+        <button id="register-btn">Register</button>
+        <button id="logout-btn" style="display: none;">Logout</button>
+    </div>
+
+    <nav>
+        <ul>
+            <li><a href="#" id="home-link">Home</a></li>
+            <li><a href="#" id="random-drink-link">Random Drink</a></li>
+            <li><a href="#" id="favorites-link">Favorites</a></li>
+            <li><a href="#" id="stats-link">Stats</a></li>
+            <li><a href="#" id="about-link">About</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <input type="text" id="search-bar" placeholder="Search for a drink...">
+        <div id="loading">
+            <div class="spinner"></div>
+            <p>Loading drinks...</p>
+        </div>
+        <div class="drink-list" id="drink-list"></div>
+    </div>
+
+    <div id="drink-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modal-title"></h2>
+            <img id="modal-image" src="" alt="" style="max-width: 100%;">
+            <button class="favorite-btn">&#9733;</button>
+            <div class="rating">
+                <span class="star" data-rating="1">&#9733;</span>
+                <span class="star" data-rating="2">&#9733;</span>
+                <span class="star" data-rating="3">&#9733;</span>
+                <span class="star" data-rating="4">&#9733;</span>
+                <span class="star" data-rating="5">&#9733;</span>
+            </div>
+            <h3>Ingredients:</h3>
+            <ul id="modal-ingredients"></ul>
+            <h3>Instructions:</h3>
+            <p id="modal-instructions"></p>
+        </div>
+    </div>
+
+    <div id="auth-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="auth-modal-title"></h2>
+            <form id="auth-form">
+                <input type="email" id="email" placeholder="Email" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="stats-container" style="display: none;">
+        <h2>Drink Statistics</h2>
+        <canvas id="stats-chart"></canvas>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'https://www.thecocktaildb.com/api/json/v1/1/';
+        const drinkList = document.getElementById('drink-list');
+        const searchBar = document.getElementById('search-bar');
+        const loadingIndicator = document.getElementById('loading');
+        const modal = document.getElementById('drink-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalImage = document.getElementById('modal-image');
+        const modalIngredients = document.getElementById('modal-ingredients');
+        const modalInstructions = document.getElementById('modal-instructions');
+        const closeModal = document.getElementsByClassName('close')[0];
+        const authModal = document.getElementById('auth-modal');
+        const authModalTitle = document.getElementById('auth-modal-title');
+        const authForm = document.getElementById('auth-form');
+        const loginBtn = document.getElementById('login-btn');
+        const registerBtn = document.getElementById('register-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const favoriteBtn = document.querySelector('.favorite-btn');
+        const ratingStars = document.querySelectorAll('.rating .star');
+        const statsContainer = document.getElementById('stats-container');
+        const statsChart = document.getElementById('stats-chart');
+
+        let currentUser = null;
+        let favorites = [];
+        let ratings = {};
+
+        // Function to fetch drinks from the API
+        async function fetchDrinks(searchTerm = '') {
+            showLoading();
+            let url = searchTerm
+                ? `${API_BASE_URL}search.php?s=${searchTerm}`
+                : `${API_BASE_URL}search.php?f=a`;
+            
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                hideLoading();
+                return data.drinks || [];
+            } catch (error) {
+                console.error('Error fetching drinks:', error);
+                hideLoading();
+                return [];
+            }
+        }
+
+        // Function to display drinks
+        function displayDrinks(drinks) {
+            drinkList.innerHTML = '';
+            drinks.forEach(drink => {
+                const drinkCard = document.createElement('div');
+                drinkCard.classList.add('drink-card');
+                drinkCard.innerHTML = `
+                    <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}">
+                    <div class="drink-info">
+                        <h3>${drink.strDrink}</h3>
+                        <p>${drink.strCategory}</p>
+                    </div>
+                `;
+                drinkCard.addEventListener('click', () => showDrinkDetails(drink));
+                drinkList.appendChild(drinkCard);
+            });
+        }
+
+        // Function to show drink details in modal
+        function showDrinkDetails(drink) {
+            modalTitle.textContent = drink.strDrink;
+            modalImage.src = drink.strDrinkThumb;
+            modalImage.alt = drink.strDrink;
+            
+            modalIngredients.innerHTML = '';
+            for (let i = 1; i <= 15; i++) {
+                if (drink[`strIngredient${i}`]) {
+                    const li = document.createElement('li');
+                    li.textContent = `${drink[`strMeasure${i}`] || ''} ${drink[`strIngredient${i}`]}`;
+                    modalIngredients.appendChild(li);
+                }
+            }
+            
+            modalInstructions.textContent = drink.strInstructions;
+
+            favoriteBtn.classList.toggle('active', favorites.includes(drink.idDrink));
+            updateRatingDisplay(ratings[drink.idDrink] || 0);
+
+            modal.style.display = 'block';
+        }
+
+        // Event listener for search
+        searchBar.addEventListener('input', debounce(async (e) => {
+            const drinks = await fetchDrinks(e.target.value);
+            displayDrinks(drinks);
+        }, 300));
+
+        // Event listener to close modal
+        closeModal.onclick = function() {
+            modal.style.display = 'none';
+        }
+
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+            if (event.target == authModal) {
+                authModal.style.display = 'none';
+            }
+        }
+
+        // Debounce function to limit API calls
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Function to show loading indicator
+        function showLoading() {
+            loadingIndicator.style.display = 'block';
+        }
+
+        // Function to hide loading indicator
+        function hideLoading() {
+            loadingIndicator.style.display = 'none';
+        }
+
+        // Event listener for random drink
+        document.getElementById('random-drink-link').addEventListener('click', async (e) => {
+            e.preventDefault();
+            showLoading();
+            try {
+                const response = await
