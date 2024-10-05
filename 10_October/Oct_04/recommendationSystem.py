@@ -67,4 +67,28 @@ new_tfidf_matrix = tfidf.fit_transform(new_df['features'])
 new_cosine_sim = cosine_similarity(new_tfidf_matrix, new_tfidf_matrix)
 
 # Get recommendations for the new movie
-new_recommendations = get_recommendations("Inception", new_
+new_recommendations = get_recommendations("Inception", new_cosine_sim, new_df)
+print("\nRecommendations for 'Inception':")
+print(new_recommendations)
+
+# Function to get recommendations based on genre
+def get_genre_recommendations(genre, df=df):
+    genre_movies = df[df['genre'].str.contains(genre, case=False)]
+    return genre_movies['title'].tolist()
+
+# Example usage of genre-based recommendation
+genre = "Crime"
+genre_recommendations = get_genre_recommendations(genre)
+print(f"\nRecommendations for {genre} movies:")
+print(genre_recommendations)
+
+# Function to get director's movies
+def get_director_movies(director, df=df):
+    director_films = df[df['director'] == director]
+    return director_films['title'].tolist()
+
+# Example usage of director-based recommendation
+director = "Christopher Nolan"
+director_movies = get_director_movies(director, new_df)
+print(f"\nMovies directed by {director}:")
+print(director_movies)
